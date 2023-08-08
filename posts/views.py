@@ -55,13 +55,10 @@ class ScarpView(ModelViewSet):
     permission_classes = [IsAuthenticated]
 
 
-class ScrapPostView(APIView):
+class ScrapPostView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
+    serializer_class = ScrapPostListSerializer
 
-    def get_object(self, request):
-        scrap_post = Scrap.objects.filter(user=request.user)
-        return scrap_post
+    def get_queryset(self):
+        return Scrap.objects.filter(user = self.request.user)
     
-    def get(self, request):     
-        serializer = ScrapPostListSerializer(self.get_object(request=request),many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
