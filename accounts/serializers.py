@@ -5,6 +5,7 @@ from django.contrib.auth.password_validation import validate_password
 
 from .models import User,disease,medicine,allergy
 
+
 class UserModelSerializer(ModelSerializer):
     class Meta:
         model = User
@@ -23,7 +24,7 @@ class UserSignupSerializer(ModelSerializer):
         model = User
         fields = ['username', 'password', 'password2', 'email', 'phone','age','pregnancy']
 
-    def validate_password(self, attrs):
+    def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
             raise ValidationError({"password": "Password fields didn't match."})
         return attrs
