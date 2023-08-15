@@ -14,6 +14,7 @@ urlpatterns = [
     path('posts/',include('posts.urls')),
     path('accounts/',include('accounts.urls')),
 ]
+
 # setting of swagger
 schema_view = get_schema_view(
    openapi.Info(

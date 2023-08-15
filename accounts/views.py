@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from rest_framework import generics
+from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated,AllowAny
 
 from .serializers import (UserModelSerializer,UserSignupSerializer,DiseaseMediSerializer,
@@ -47,4 +48,9 @@ class UserMediListView(generics.ListAPIView):
     serializer_class = MedicineSerializer   
     def get_queryset(self):
         return medicine.objects.filter(user=self.request.user)
+    
+class UserMediViewSet(ModelViewSet):
+
+    serializer_class = MedicineSerializer
+    queryset = medicine.objects.all()
     

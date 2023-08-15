@@ -5,10 +5,12 @@ from django.contrib.auth.password_validation import validate_password
 
 from .models import User,disease,medicine,allergy
 
+
 class UserModelSerializer(ModelSerializer):
     class Meta:
         model = User
         fields = '__all__'
+
 
 class UserSignupSerializer(ModelSerializer):
     email = EmailField(
@@ -41,7 +43,13 @@ class UserSignupSerializer(ModelSerializer):
 class MedicineSerializer(ModelSerializer):
     class Meta:
         model = medicine
-        fields =['name']
+        fields ='__all__'
+
+    def create(self, validated_data):
+        medi = medicine.objects.create(**validated_data)
+        medi.user = self.context['request'].user
+        medi.save()
+        return medi
 
 
 
@@ -50,7 +58,7 @@ class DiseaseMediSerializer(ModelSerializer):
 
     def get_medicines(self,obj):
         medi = obj.disease_medi.all()
-        return MedicineSerializer(instance=medi, many=True).data
+        return MedicineSerializer(instance=medi, many=True).data['name']
 
     class Meta:
         model = disease
@@ -63,7 +71,7 @@ class AllergyMediSerializer(ModelSerializer):
 
     def get_medicines(self,obj):
         medi = obj.allergy_medi.all()
-        return MedicineSerializer(instance=medi,many=True).data
+        return MedicineSerializer(instance=medi,many=True).data['name']
     
     class Meta:
         model = allergy 
