@@ -11,13 +11,13 @@ class Post(models.Model):
         unique=True
     )
 
-    image = models.ImageField(
+    image = models.URLField(
         verbose_name='사진',
+        default="",
     )
     
     medi_info = models.TextField(
         verbose_name='약물 정보',
-        max_length=2000,
     )
 
     url = models.URLField(
@@ -38,3 +38,4 @@ class Scrap(models.Model):
         on_delete=models.CASCADE,
         related_name='scrap',
     )
+

@@ -27,6 +27,8 @@ class UserManager(DjangoUserManager): #장고 모델이 디비로 쿼리를 날�
         extra_fields.setdefault('is_staff',True)
         extra_fields.setdefault('is_superuser',True)
         return self._create_user(username,email,password,**extra_fields)
+    
+
 
 class User(AbstractBaseUser, PermissionsMixin):
     username_validator = UnicodeUsernameValidator()
@@ -54,14 +56,33 @@ class User(AbstractBaseUser, PermissionsMixin):
         super().clean()
         self.email = self.__class__.objects.normalize_email(self.email)
         
+
+
 class disease(models.Model):
-    user = models.ForeignKey(User,on_delete=models.CASCADE,null=True,blank=True, related_name='User_disease')
+    user = models.ForeignKey(User,on_delete=models.CASCADE,null=True,blank=True, related_name='disease')
     name = models.CharField(verbose_name='disease_name',max_length=15)
 
-class medicine(models.Model):
-    user = models.ForeignKey (User, on_delete=models.CASCADE, null=True, blank=True, related_name='User_medicine')
-    name = models.CharField(verbose_name='medicine_name',max_length=15)
-    
+
 class allergy(models.Model):
-    user = models.ForeignKey(User,on_delete=models.CASCADE, null=True, blank=True, related_name='User_allergy')
+    user = models.ForeignKey(User,on_delete=models.CASCADE, null=True, blank=True, related_name='allergy')
     name = models.CharField(verbose_name='allergy_name',max_length=15)
+
+class medicine(models.Model):
+    user = models.ForeignKey (User, on_delete=models.CASCADE, null=True, blank=True, related_name='medicine') 
+    name = models.CharField(verbose_name='medicine_name',max_length=15)
+
+    disease = models.ForeignKey(
+        to = 'disease',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='disease_medi',
+        )
+    
+    allergy = models.ForeignKey(
+        to = 'allergy',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='allergy_medi',
+    )

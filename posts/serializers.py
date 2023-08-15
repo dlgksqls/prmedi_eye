@@ -27,12 +27,12 @@ class ScrapSerializer(ModelSerializer):
     
 
 class ScrapPostListSerializer(ScrapSerializer):
-    post_name = SerializerMethodField()
+    posts = SerializerMethodField()
 
-
+# obj = scrap(self.request.user)
     def get_posts(self, obj):
-        post_name = obj.post.name
-        return post_name
+        post = obj.post.all()
+        return PostDetailSerializer(post,many=True).data['name']
 
     class Meta(ScrapSerializer.Meta):
-        fields = ['post_name']
+        fields = ['posts']

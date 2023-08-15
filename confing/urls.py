@@ -12,7 +12,7 @@ from accounts.views import UserListView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('posts/',include('posts.urls')),
-    path('list/',UserListView.as_view(),name='user-list'),
+    path('accounts/',include('accounts.urls')),
 ]
 # setting of swagger
 schema_view = get_schema_view(
